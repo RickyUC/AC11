@@ -10,6 +10,7 @@ from PyQt5.QtCore import Qt, QSize
 
 import sys
 
+
 class Prograrice(QMainWindow):
     def __init__(self):
         super().__init__()
