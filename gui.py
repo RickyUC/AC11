@@ -12,6 +12,7 @@ from PyQt5.QtCore import Qt, QSize
 
 import sys
 
+
 class Prograrice(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -68,11 +69,8 @@ class Prograrice(QMainWindow):
             pass
 
 
-
-
 if __name__ == '__main___':
-    app = QApplication([])
+    app = QApplication(sys.argv)
     window = Prograrice()
     window.show()
     sys.exit(app.exec_())
-
