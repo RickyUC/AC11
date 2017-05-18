@@ -8,12 +8,13 @@ from PyQt5.QtTest import QTest
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt, QSize
 
+from os import sep
 
 
 import sys
 
 
-class Prograrice(QMainWindow):
+class Prograrice(QWidget):
     def __init__(self):
         super().__init__()
         self.init_GUI()
@@ -24,38 +25,45 @@ class Prograrice(QMainWindow):
         carta_reverso = QPixmap('Imgs'+sep+'back.png')
         carta_reverso = carta_reverso.scaled(120,120)
         self.boton = QPushButton(self)
-        self.boton.setIcon(carta_reverso)
+        icon = QIcon(carta_reverso)
+        self.boton.setIcon(icon)
+
 
         # Grilla con las imagenes
         self.grilla = QGridLayout()
-        posiciones = [(i, j) for i in range(5) for j in range(5)]
+        posiciones = [(i*40, j*40) for i in range(5) for j in range(5)]
         for posicion in posiciones:
             self.grilla.addWidget(self.boton, *posicion)
 
         # Etiquetas
         self.intentos = QLabel('Intentos: 0', self)
+        self.intentos.move(10, 59)
         self.tiempo_restante = QLabel('Tiempo Restante: ', self)
 
-        self.titulo = QLabel(self, 'Prograrice')
+        self.titulo = QLabel(self)
+        self.titulo.setText('Prograrice')
+        self.titulo.move(400, 15)
 
         # Boton Ocultar
         self.ocultar = QPushButton(self)
         self.ocultar.setText('Ocultar')
+        self.ocultar.move(10, 600)
 
         # Layouts
         vbox = QVBoxLayout()
-        vbox.addStretch(1)
+        vbox.addStretch(10)
         vbox.addWidget(self.titulo)
         vbox.addWidget(self.tiempo_restante)
         vbox.addWidget(self.intentos)
-        vbox.addLayout(self.grilla)
+        self.setLayout(self.grilla)
         vbox.addWidget(self.ocultar)
+
         vbox.addStretch(1)
         self.setLayout(vbox)
 
         # Ventana principal:
         self.setWindowTitle('Prograrice')
-        self.setGeometry(100, 100, 200, 300)
+        self.setGeometry(300, 300, 800, 800)
         self.show()
 
     def actualizar_intentos(self, numero):
@@ -69,8 +77,8 @@ class Prograrice(QMainWindow):
             pass
 
 
-if __name__ == '__main___':
-    app = QApplication(sys.argv)
+if __name__ == '__main__':
+    app = QApplication([])
     window = Prograrice()
     window.show()
     sys.exit(app.exec_())
