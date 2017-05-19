@@ -9,17 +9,17 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import Qt, QSize
 
 from os import sep
+from sys import exit
+from time import sleep
 
 
-import sys
+from new_backend import PBackend
 
 
 class Prograrice(QWidget):
     def __init__(self):
         super().__init__()
         self.init_GUI()
-
-        self.c_intentos = 0
 
     def init_GUI(self):
 
@@ -35,11 +35,10 @@ class Prograrice(QWidget):
         for posicion in posiciones:
             boton = QPushButton(self)
             boton.setIcon(icon)
-
             size = QSize(90,90)
             boton.setIconSize(size)
-
             boton.setFixedSize(100,100)
+            boton.clicked.connect(self.click_sobre_imagen)
             self.grilla.addWidget(boton, *posicion)
 
         # Etiquetas
@@ -54,21 +53,19 @@ class Prograrice(QWidget):
         self.ocultar.setText('Ocultar')
         self.ocultar.setFixedSize(100,30)
 
+        # Layouts
         hbox1 = QHBoxLayout()
         hbox1.addStretch(1)
         hbox1.addWidget(self.titulo)
         hbox1.addStretch(1)
-
         hbox2 = QHBoxLayout()
         hbox2.addWidget(self.tiempo_restante)
         hbox2.addStretch(1)
         hbox2.addWidget(self.intentos)
-
         hbox3 = QHBoxLayout()
         hbox3.addStretch(4)
         hbox3.addWidget(self.ocultar)
 
-        # Layouts
         vbox = QVBoxLayout()
         vbox.addStretch(2)
         vbox.addLayout(hbox1)
@@ -77,7 +74,6 @@ class Prograrice(QWidget):
         vbox.addStretch(1)
         vbox.addLayout(hbox3)
         vbox.addStretch(2)
-
         self.setLayout(vbox)
 
         # Ventana principal:
@@ -86,11 +82,15 @@ class Prograrice(QWidget):
         self.setGeometry(100, 100, 500, 600)
         self.show()
 
-    def clock_sobre_imagen(self):
-        self.c_intentos += 1
+    def actualizar_intentos(self):
+        self.intentos.setText('Intentos: {}'.format(PBackend.tries))
 
-    def actualizar_intentos(self, numero):
-        self.intentos.setText('Intentos: {}'.format(numero))
+    def click_sobre_imagen(self):
+        apretado = self.sender()
+        idx = self.grilla.indexOf(apretado)
+
+        PBackend.draw_first(idx)
+        # self.actualizar_intentos()
 
     def agregar_func_ocultar(self,funcion):
         self.ocultar.clicked.connect(funcion)
@@ -104,4 +104,4 @@ if __name__ == '__main__':
     app = QApplication([])
     window = Prograrice()
     window.show()
-    sys.exit(app.exec_())
+    exit(app.exec_())
