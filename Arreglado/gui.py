@@ -19,12 +19,15 @@ class Prograrice(QWidget):
         super().__init__()
         self.init_GUI()
 
+        self.c_intentos = 0
+
     def init_GUI(self):
 
         #Cartas reverso:
         carta_reverso = QPixmap('Imgs'+sep+'back.png')
-        carta_reverso = carta_reverso.scaled(120,120)
-        icon = QIcon(carta_reverso)
+        carta_reverso = carta_reverso.scaled(100,100)
+        icon = QIcon()
+        icon.addPixmap(carta_reverso)
 
         # Grilla con las imagenes
         self.grilla = QGridLayout()
@@ -32,39 +35,59 @@ class Prograrice(QWidget):
         for posicion in posiciones:
             boton = QPushButton(self)
             boton.setIcon(icon)
-            boton.resize(120,120)
+
+            size = QSize(90,90)
+            boton.setIconSize(size)
+
+            boton.setFixedSize(100,100)
             self.grilla.addWidget(boton, *posicion)
 
         # Etiquetas
         self.intentos = QLabel('Intentos: 0', self)
-        self.intentos.move(10, 59)
         self.tiempo_restante = QLabel('Tiempo Restante: ', self)
 
         self.titulo = QLabel(self)
-        self.titulo.setText('Prograrice')
-        self.titulo.move(400, 15)
+        self.titulo.setText('PROGRARICE')
 
         # Boton Ocultar
         self.ocultar = QPushButton(self)
         self.ocultar.setText('Ocultar')
-        self.ocultar.move(10, 600)
+        self.ocultar.setFixedSize(100,30)
+
+        hbox1 = QHBoxLayout()
+        hbox1.addStretch(1)
+        hbox1.addWidget(self.titulo)
+        hbox1.addStretch(1)
+
+        hbox2 = QHBoxLayout()
+        hbox2.addWidget(self.tiempo_restante)
+        hbox2.addStretch(1)
+        hbox2.addWidget(self.intentos)
+
+        hbox3 = QHBoxLayout()
+        hbox3.addStretch(4)
+        hbox3.addWidget(self.ocultar)
 
         # Layouts
         vbox = QVBoxLayout()
-        vbox.addStretch(10)
-        vbox.addWidget(self.titulo)
-        vbox.addWidget(self.tiempo_restante)
-        vbox.addWidget(self.intentos)
+        vbox.addStretch(2)
+        vbox.addLayout(hbox1)
+        vbox.addLayout(hbox2)
         vbox.addLayout(self.grilla)
-        vbox.addWidget(self.ocultar)
-
         vbox.addStretch(1)
+        vbox.addLayout(hbox3)
+        vbox.addStretch(2)
+
         self.setLayout(vbox)
 
         # Ventana principal:
         self.setWindowTitle('Prograrice')
-        self.setGeometry(300, 300, 800, 800)
+        self.setWindowIcon(icon)
+        self.setGeometry(100, 100, 500, 600)
         self.show()
+
+    def clock_sobre_imagen(self):
+        self.c_intentos += 1
 
     def actualizar_intentos(self, numero):
         self.intentos.setText('Intentos: {}'.format(numero))
