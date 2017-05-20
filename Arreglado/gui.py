@@ -20,6 +20,7 @@ class Prograrice(QWidget):
     def __init__(self):
         super().__init__()
         self.init_GUI()
+        self.primera_carta = False
 
     def init_GUI(self):
 
@@ -86,18 +87,52 @@ class Prograrice(QWidget):
         self.intentos.setText('Intentos: {}'.format(PBackend.tries))
 
     def click_sobre_imagen(self):
+        print('1')
         apretado = self.sender()
         idx = self.grilla.indexOf(apretado)
+        print(idx)
+        if PBackend.se_puede_presionar(idx):
+            print('2')
+            carta_anverso = QPixmap('Imgs{0}{1}.png'.format(sep, PBackend.cards[idx][0]))
+            carta_anverso = carta_anverso.scaled(100, 100)
+            icon = QIcon()
+            icon.addPixmap(carta_anverso)
+            apretado.setIcon(icon)
+            size = QSize(90, 90)
+            apretado.setIconSize(size)
+            # PBackend.draw(idx)
+            self.actualizar_intentos()
 
-        PBackend.draw_first(idx)
-        # self.actualizar_intentos()
+            if self.primera_carta:
+                sleep(3)
+                # PBackend.ocultar()
+
+                self.primera_carta = False
+
+        else:
+            pass
 
     def agregar_func_ocultar(self,funcion):
         self.ocultar.clicked.connect(funcion)
 
-    def imagenes_a_mostrar(self,lista):
-        for nombre_imagen in lista:
-            pass
+    '''def ocultar_todo(self):
+        posiciones = [(i, j) for i in range(5) for j in range(5)]
+        i = 1
+        for posicion in posiciones:
+            if self
+
+            boton = QPushButton(self)
+            boton.setIcon(icon)
+            size = QSize(90, 90)
+            boton.setIconSize(size)
+            boton.setFixedSize(100, 100)
+            boton.clicked.connect(self.click_sobre_imagen)
+            self.grilla.addWidget(boton, *posicion)
+
+            self.grilla.
+
+            i += 1'''
+
 
 
 if __name__ == '__main__':
